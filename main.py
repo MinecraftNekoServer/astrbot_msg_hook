@@ -2,12 +2,13 @@ import asyncio
 from aiohttp import web
 from astrbot.api.event import filter, AstrMessageEvent, MessageEventResult
 from astrbot.api.star import Context, Star, register
-from astrbot.api import logger
+from astrbot.api import logger, AstrBotConfig
 
 @register("msg_hook", "MinecraftNekoServer", "HTTP 消息转发插件", "1.0.0")
 class MsgHookPlugin(Star):
-    def __init__(self, context: Context):
+    def __init__(self, context: Context, config: AstrBotConfig):
         super().__init__(context)
+        self.config = config
         self.app = None
         self.runner = None
         self.site = None
@@ -18,8 +19,8 @@ class MsgHookPlugin(Star):
 
     def get_config_value(self, key, default=None):
         """获取配置值"""
-        config = self.context.get_config()
-        return config.get(key, default) if config else default
+        logger.info(f"请求的键: {key}, 值: {self.config.get(key, default)}")
+        return self.config.get(key, default)
 
     async def start_http_server(self):
         """启动 HTTP 服务器"""
@@ -70,8 +71,11 @@ class MsgHookPlugin(Star):
                 return web.json_response({'success': False, 'error': '消息内容不能为空'}, status=400)
 
             target_groups = self.get_config_value('target_groups', [])
+            logger.info(f"读取到的配置 target_groups: {target_groups}, 类型: {type(target_groups)}")
+            
             # 转换群号为整数
             target_groups = [int(g) for g in target_groups if g]
+            logger.info(f"转换后的 target_groups: {target_groups}")
             
             if not target_groups:
                 return web.json_response({'success': False, 'error': '未配置目标群号'}, status=400)
