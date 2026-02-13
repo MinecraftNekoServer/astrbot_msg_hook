@@ -1,8 +1,9 @@
 import asyncio
 from aiohttp import web
-from astrbot.api.event import filter, AstrMessageEvent, MessageEventResult
+from astrbot.api.event import filter, AstrMessageEvent, MessageEventResult, MessageChain
 from astrbot.api.star import Context, Star, register
 from astrbot.api import logger, AstrBotConfig
+import astrbot.api.message_components as Comp
 
 @register("msg_hook", "MinecraftNekoServer", "HTTP 消息转发插件", "1.0.0")
 class MsgHookPlugin(Star):
@@ -123,8 +124,20 @@ class MsgHookPlugin(Star):
     async def send_to_group(self, group_id: int, message: str):
         """发送消息到指定群"""
         try:
-            platform = self.context.get_platform_adapter()
-            result = await platform.send_group_message(group_id, message)
+            # 获取平台适配器实例，使用第一个可用的平台
+            platforms = self.context.platform_manager.platform_insts
+            if not platforms:
+                logger.error("没有可用的消息平台")
+                return False
+            
+            platform = platforms[0]
+            platform_id = platform.meta().id
+            
+            # 构造 session 字符串: platform_id:GroupMessage:group_id
+            session_str = f"{platform_id}:GroupMessage:{group_id}"
+            
+            message_chain = MessageChain(chain=[Comp.Plain(message)])
+            result = await self.context.send_message(session_str, message_chain)
             return True
         except Exception as e:
             logger.error(f"发送群消息失败: {e}")
