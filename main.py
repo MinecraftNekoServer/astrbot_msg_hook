@@ -70,6 +70,9 @@ class MsgHookPlugin(Star):
                 return web.json_response({'success': False, 'error': '消息内容不能为空'}, status=400)
 
             target_groups = self.get_config_value('target_groups', [])
+            # 转换群号为整数
+            target_groups = [int(g) for g in target_groups if g]
+            
             if not target_groups:
                 return web.json_response({'success': False, 'error': '未配置目标群号'}, status=400)
 
