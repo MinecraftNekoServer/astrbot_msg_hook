@@ -1,1 +1,44 @@
-{"server_host": {"description": "HTTP 服务器监听地址", "type": "string", "default": "127.0.0.1", "hint": "HTTP 服务器监听的 IP 地址，默认 127.0.0.1 仅允许本机访问。如需外部访问请设置为 0.0.0.0"}, "server_port": {"description": "HTTP 服务器端口", "type": "int", "default": 8080, "hint": "HTTP 服务器监听的端口号，默认 8080"}, "api_token": {"description": "API 访问令牌", "type": "string", "default": "", "hint": "用于验证 HTTP 请求的访问令牌，留空则不验证。建议在生产环境中设置以保护接口安全"}, "target_groups": {"description": "目标群号列表", "type": "list", "default": [], "hint": "接收消息的目标 QQ 群号列表，支持多个群，请输入数字，每行一个"}, "enable_forward": {"description": "启用消息转发", "type": "bool", "default": true, "hint": "是否启用消息转发功能，关闭后 HTTP 接口将拒绝发送请求"}, "message_prefix": {"description": "消息前缀", "type": "string", "default": "", "hint": "在转发消息前自动添加的前缀文本，留空则不添加"}, "message_suffix": {"description": "消息后缀", "type": "string", "default": "", "hint": "在转发消息后自动添加的后缀文本，留空则不添加"}}
+{
+  "server_host": {
+    "description": "HTTP 服务器监听地址",
+    "type": "string",
+    "default": "127.0.0.1",
+    "hint": "HTTP 服务器监听的 IP 地址，默认 127.0.0.1 仅允许本机访问。如需外部访问请设置为 0.0.0.0"
+  },
+  "server_port": {
+    "description": "HTTP 服务器端口",
+    "type": "int",
+    "default": 8080,
+    "hint": "HTTP 服务器监听的端口号，默认 8080"
+  },
+  "api_token": {
+    "description": "API 访问令牌",
+    "type": "string",
+    "default": "",
+    "hint": "用于验证 HTTP 请求的访问令牌，留空则不验证。建议在生产环境中设置以保护接口安全"
+  },
+  "target_groups": {
+    "description": "目标群号列表",
+    "type": "list",
+    "default": [],
+    "hint": "接收消息的目标 QQ 群号列表，支持多个群，请输入数字，每行一个"
+  },
+  "enable_forward": {
+    "description": "启用消息转发",
+    "type": "bool",
+    "default": true,
+    "hint": "是否启用消息转发功能，关闭后 HTTP 接口将拒绝发送请求"
+  },
+  "message_prefix": {
+    "description": "消息前缀",
+    "type": "string",
+    "default": "",
+    "hint": "在转发消息前自动添加的前缀文本，留空则不添加"
+  },
+  "message_suffix": {
+    "description": "消息后缀",
+    "type": "string",
+    "default": "",
+    "hint": "在转发消息后自动添加的后缀文本，留空则不添加"
+  }
+}
